@@ -5,10 +5,11 @@ from io import StringIO
 
 from flask import Flask, url_for, request, Response
 import os.path
+from db_modules.books import db_list_books
 
 app =  Flask(__name__)
 
-DSN = 'dbname=g_message_test'
+DSN = 'dbname=bookshelf_dev'
 
 print(sys.argv)
 
@@ -16,42 +17,48 @@ if len(sys.argv) > 3:
     DSN = sys.argv[3]
     print(DSN)
 
+# serving index.html
 @app.route("/", methods=['GET'])
 def url_for_static():
     return app.send_static_file('index.html')
 
+# serving other resources from static directory
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def static_file(path):
     return app.send_static_file(path)
 
-@app.route("/messages", methods=['GET'])
-def list():
-    print("Opening connection using dsn:", DSN)
-    conn = psycopg2.connect(DSN)
-    print("Encoding for this connection is", conn.encoding)
+@app.route('/books', methods=['GET'])
+def list_books():
+    return db_list_books(DSN)
 
-    curs = conn.cursor()
-    print("Extracting the rows ...")
-    curs.execute("SELECT * FROM messages order by id desc")
-    io = StringIO()
-    data = list()
-    for row in curs.fetchall():
-        data.insert(0, dict(id=row[0], name=row[1], message=row[2]))
-    json.dump(data, io)
-    curs.close()
-    conn.close()
-    return io.getvalue()
-
-@app.route("/messages/<id>", methods=['GET'])
-def getById(id):
-    return id
-
-@app.route("/messages/<id>", methods=['PATCH'])
-def patchById(id):
-    io = StringIO()
-    json.dump(request.get_json(), io)
-    return 'patch ' + id + ' ' + io.getvalue()
+# @app.route("/messages", methods=['GET'])
+# def list():
+#     print("Opening connection using dsn:", DSN)
+#     conn = psycopg2.connect(DSN)
+#     print("Encoding for this connection is", conn.encoding)
+#
+#     curs = conn.cursor()
+#     print("Extracting the rows ...")
+#     curs.execute("SELECT * FROM messages order by id desc")
+#     io = StringIO()
+#     data = list()
+#     for row in curs.fetchall():
+#         data.insert(0, dict(id=row[0], name=row[1], message=row[2]))
+#     json.dump(data, io)
+#     curs.close()
+#     conn.close()
+#     return io.getvalue()
+#
+# @app.route("/messages/<id>", methods=['GET'])
+# def getById(id):
+#     return id
+#
+# @app.route("/messages/<id>", methods=['PATCH'])
+# def patchById(id):
+#     io = StringIO()
+#     json.dump(request.get_json(), io)
+#     return 'patch ' + id + ' ' + io.getvalue()
 
 # conn = psycopg2.connect(DSN)
 # curs = conn.cursor()
