@@ -19,7 +19,7 @@ def decode_auth_token(auth_token):
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
 
-def encode_auth_token(self, email):
+def encode_auth_token(email):
     """
     Generates the Auth Token
     :return: string
@@ -40,7 +40,7 @@ def encode_auth_token(self, email):
 
 def get_hashed_password(password):
     bcrypt = Bcrypt(app)
-    pw_hash = bcrypt.generate_password_hash(password)
+    pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
     return pw_hash
 
 def match_hashed_password(pw_hash, password):

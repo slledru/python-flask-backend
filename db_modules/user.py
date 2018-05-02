@@ -22,6 +22,8 @@ def create_user(DSN):
     if (last_name == None):
         abort(401)
     hashed_password = get_hashed_password(password)
+    print(hashed_password)
+    print(len(hashed_password))
     dictionary = {}
     conn = psycopg2.connect(DSN)
     curs = conn.cursor()
@@ -37,9 +39,9 @@ def create_user(DSN):
         dictionary['email'] = email
         dictionary['hashedPassword'] = hashed_password
     except psycopg2.Error as e:
-        print(e)
+        print('err', e)
         dictionary = {}
-        dictionary['status'] = 404
+        dictionary['status'] = 400
         pass
     conn.commit()
     curs.close()
