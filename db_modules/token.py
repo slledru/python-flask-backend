@@ -48,7 +48,8 @@ def find_user_by_email(DSN, email, password):
                 dictionary['last_name'] = row[2]
                 dictionary['email'] = row[3]
                 dictionary['hashed_password'] = row[4]
-            if (~match_hashed_password(dictionary['hashed_password'], password)):
+                print(row[4], dictionary['hashed_password'].encode('utf-8'))
+            if (not match_hashed_password(dictionary['hashed_password'], password)):
                 dictionary = {}
                 dictionary['status'] = 401
                 dictionary['message'] = 'Unable to authenticate user'

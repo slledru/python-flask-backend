@@ -45,4 +45,4 @@ def get_hashed_password(password):
 
 def match_hashed_password(pw_hash, password):
     bcrypt = Bcrypt(app)
-    return bcrypt.check_password_hash(pw_hash, password)
+    return bcrypt.check_password_hash(pw_hash.encode('utf-8'), password)
