@@ -1,11 +1,10 @@
 from flask import Response, request
-from db_modules.jwt_util import encode_auth_token, get_hashed_password
+from db_modules.jwt_util import get_hashed_password, build_response
 import psycopg2
 import json
 from io import StringIO
 
-def create_user(DSN):
-    print(request.data)
+def db_create_user(DSN):
     if (request.data == b''):
         return Response(status=401)
     dataDict = json.loads(request.data)
@@ -22,8 +21,6 @@ def create_user(DSN):
     if (last_name == None):
         abort(401)
     hashed_password = get_hashed_password(password)
-    print(hashed_password)
-    print(len(hashed_password))
     dictionary = {}
     conn = psycopg2.connect(DSN)
     curs = conn.cursor()
@@ -47,8 +44,7 @@ def create_user(DSN):
     curs.close()
     conn.close()
     if (dictionary['status'] == 200):
-        Response.set_cookie('token', encode_auth_token(email))
-        return Response(dictionary, status=200, mimetype='application/json')
+        return build_response(dictionary, email)
     else:
         io = StringIO()
         json.dump(dictionary, io)

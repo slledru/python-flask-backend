@@ -12,7 +12,7 @@ def decode_auth_token(auth_token):
     :return: integer|string
     """
     try:
-        payload = jwt.decode(auth_token, os.getenv('JWT_KEY'))
+        payload = jwt.decode(auth_token, os.getenv('JWT_KEY'), algorithm='HS256')
         return payload['sub']
     except jwt.ExpiredSignatureError:
         return 'Signature expired. Please log in again.'
@@ -26,8 +26,8 @@ def encode_auth_token(email):
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-            'iat': datetime.datetime.utcnow(),
+            # 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+            # 'iat': datetime.datetime.utcnow(),
             'sub': email
         }
         return jwt.encode(
@@ -36,6 +36,7 @@ def encode_auth_token(email):
             algorithm='HS256'
         )
     except Exception as e:
+        print('exception', e)
         return e
 
 def get_hashed_password(password):
@@ -46,3 +47,14 @@ def get_hashed_password(password):
 def match_hashed_password(pw_hash, password):
     bcrypt = Bcrypt(app)
     return bcrypt.check_password_hash(pw_hash.encode('utf-8'), password)
+
+def build_response(data, email):
+    response = Response(
+        response = json.dumps(data),
+        status = 200,
+        mimetype = 'application/json'
+    )
+    cookie = encode_auth_token(email)
+    print(cookie)
+    response.set_cookie("token", cookie)
+    return response
