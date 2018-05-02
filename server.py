@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 
 from db_modules.books import db_list_books, db_get_book
 from db_modules.token import check_token, create_token
-from db_modules.user import create_user
+from db_modules.user import db_create_user
+from db_modules.favorites import db_list_favorites
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -55,7 +56,11 @@ def post_token():
 
 @app.route('/users', methods=['POST'])
 def post_user():
-    return create_user(DSN)
+    return db_create_user(DSN)
+
+@app.route('/favorites', methods=['GET'])
+def get_favorites():
+    return db_list_favorites(DSN)
 
 if __name__ == '__main__':
     app.run(debug=True)
