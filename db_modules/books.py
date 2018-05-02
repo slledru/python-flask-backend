@@ -13,7 +13,7 @@ def db_list_books(DSN):
     io = StringIO()
     data = list()
     for row in curs.fetchall():
-        print(row)
+        # print(row)
         dictionary = {}
         dictionary['id'] = row[0]
         dictionary['title'] = row[1]
@@ -25,6 +25,27 @@ def db_list_books(DSN):
         # dict(id=row[0], title=row[1], author=row[2], genre=row[3]))
         # data.insert(0, row)
     json.dump(data, io)
+    curs.close()
+    conn.close()
+    return io.getvalue()
+
+def db_get_book(DSN, id):
+    conn = psycopg2.connect(DSN)
+    print("Encoding for this connection is", conn.encoding)
+
+    curs = conn.cursor()
+    curs.execute("SELECT * FROM books where id='%s'" % id)
+    io = StringIO()
+    dictionary = {}
+    for row in curs.fetchall():
+        print(row)
+        dictionary['id'] = row[0]
+        dictionary['title'] = row[1]
+        dictionary['author'] = row[2]
+        dictionary['genre'] = row[3]
+        dictionary['description'] = row[4]
+        dictionary['coverUrl'] = row[5]
+    json.dump(dictionary, io)
     curs.close()
     conn.close()
     return io.getvalue()
