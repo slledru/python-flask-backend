@@ -4,10 +4,18 @@ import json
 from io import StringIO
 
 from flask import Flask, url_for, request, Response
+from flask_jwt import JWT, jwt_required, current_identity
 import os.path
-from db_modules.books import db_list_books
+from dotenv import load_dotenv
+
+from db_modules.books import db_list_books, db_get_book
+from db_modules.token import check_token, create_token
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 app =  Flask(__name__)
+app.debug = True
 
 DSN = 'dbname=bookshelf_dev'
 
@@ -31,6 +39,21 @@ def static_file(path):
 @app.route('/books', methods=['GET'])
 def list_books():
     return db_list_books(DSN)
+
+@app.route('/books/<id>', methods=['GET'])
+def get_book(id):
+    return db_get_book(DSN, id)
+
+@app.route('/token', methods=['GET'])
+def get_token():
+    return check_token(DSN)
+
+@app.route('/token', methods=['POST'])
+def post_token():
+    return create_token(DSN)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 # @app.route("/messages", methods=['GET'])
 # def list():
