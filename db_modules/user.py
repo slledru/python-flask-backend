@@ -1,10 +1,11 @@
 from flask import Response, request
 from db_modules.jwt_util import get_hashed_password, build_response
+from db_modules.db_util import get_database_connection
 import psycopg2
 import json
 from io import StringIO
 
-def db_create_user(DSN):
+def db_create_user():
     if (request.data == b''):
         return Response(status=401)
     dataDict = json.loads(request.data)
@@ -22,7 +23,7 @@ def db_create_user(DSN):
         abort(401)
     hashed_password = get_hashed_password(password)
     dictionary = {}
-    conn = psycopg2.connect(DSN)
+    conn = get_database_connection()
     curs = conn.cursor()
     try:
         curs.execute("""

@@ -1,20 +1,20 @@
 from flask import Flask, Response, request
 from db_modules.jwt_util import decode_auth_token, match_hashed_password, build_response
-from db_modules.db_util import find_user_by_email
+from db_modules.db_util import find_user_by_email, get_database_connection
 import psycopg2
 import json
 from io import StringIO
 
-def check_token(DSN):
+def check_token():
     token = request.cookies.get('token')
     if (token != None):
         payload = decode_auth_token(token)
-        dictionary = find_user_by_email(DSN, payload)
+        dictionary = find_user_by_email(payload)
         if (dictionary['status'] == 200):
             return Response("true", status=200, mimetype='application/json')
     return Response("false", status=200, mimetype='application/json')
 
-def create_token(DSN):
+def create_token():
     print(request)
     if (request.data == b''):
         return Response(status=401)
@@ -25,7 +25,7 @@ def create_token(DSN):
         abort(401)
     if (password == None):
         abort(401)
-    dictionary = find_user_by_email(DSN, email)
+    dictionary = find_user_by_email(email)
     print(dictionary)
     if (dictionary['status'] == 200):
         if (not match_password(dictionary['hashed_password'], password)):

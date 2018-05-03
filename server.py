@@ -21,17 +21,6 @@ from db_modules.favorites import db_list_favorites
 #     pass
 
 app =  Flask(__name__)
-app.debug = True
-
-print('DATABASE_URL: ', os.getenv('DATABASE_URL'))
-
-DSN = 'dbname=postgresql-cubic-86377' # + os.getenv('DATABASE_URL')
-
-print(sys.argv)
-
-if len(sys.argv) > 3:
-    DSN = sys.argv[3]
-    print(DSN)
 
 # serving index.html
 @app.route("/", methods=['GET'])
@@ -46,31 +35,31 @@ def static_file(path):
 
 @app.route('/books', methods=['GET'])
 def list_books():
-    return db_list_books(DSN)
+    return db_list_books()
 
 @app.route('/books/<id>', methods=['GET'])
 def get_book(id):
-    return db_get_book(DSN, id)
+    return db_get_book(id)
 
 @app.route('/books', methods=['POST'])
 def post_book():
-    return db_create_book(DSN)
+    return db_create_book()
 
 @app.route('/books/<id>', methods=['PATCH'])
 def patch_book(id):
-    return db_update_book(DSN, id)
+    return db_update_book(id)
 
 @app.route('/books/<id>', methods=['DELETE'])
 def delete_book(id):
-    return db_delete_book(DSN, id)
+    return db_delete_book(id)
 
 @app.route('/token', methods=['GET'])
 def get_token():
-    return check_token(DSN)
+    return check_token()
 
 @app.route('/token', methods=['POST'])
 def post_token():
-    return create_token(DSN)
+    return create_token()
 
 @app.route('/token', methods=['DELETE'])
 def delete_token():
@@ -78,50 +67,11 @@ def delete_token():
 
 @app.route('/users', methods=['POST'])
 def post_user():
-    return db_create_user(DSN)
+    return db_create_user()
 
 @app.route('/favorites', methods=['GET'])
 def get_favorites():
-    return db_list_favorites(DSN)
+    return db_list_favorites()
 
 if __name__ == '__main__':
     app.run()
-
-# @app.route("/messages", methods=['GET'])
-# def list():
-#     print("Opening connection using dsn:", DSN)
-#     conn = psycopg2.connect(DSN)
-#     print("Encoding for this connection is", conn.encoding)
-#
-#     curs = conn.cursor()
-#     print("Extracting the rows ...")
-#     curs.execute("SELECT * FROM messages order by id desc")
-#     io = StringIO()
-#     data = list()
-#     for row in curs.fetchall():
-#         data.insert(0, dict(id=row[0], name=row[1], message=row[2]))
-#     json.dump(data, io)
-#     curs.close()
-#     conn.close()
-#     return io.getvalue()
-#
-# @app.route("/messages/<id>", methods=['GET'])
-# def getById(id):
-#     return id
-#
-# @app.route("/messages/<id>", methods=['PATCH'])
-# def patchById(id):
-#     io = StringIO()
-#     json.dump(request.get_json(), io)
-#     return 'patch ' + id + ' ' + io.getvalue()
-
-# conn = psycopg2.connect(DSN)
-# curs = conn.cursor()
-# curs.execute("""
-#     insert into messages (name, message)
-#     values (%s, %s);
-#     """,
-#     ("Test 4", "Test 4 Message"))
-# conn.commit()
-# curs.close()
-# conn.close()

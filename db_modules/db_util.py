@@ -1,8 +1,27 @@
 import psycopg2
+import urllib.parse as urlparse
+import os
 
-def find_user_by_email(DSN, email):
+def get_database_connection():
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    dbname = url.path[1:]
+    user = url.username
+    password = url.password
+    host = url.hostname
+    port = url.port
+
+    con = psycopg2.connect(
+                dbname=dbname,
+                user=user,
+                password=password,
+                host=host,
+                port=port
+                )
+    return con
+
+def find_user_by_email(email):
     dictionary = {}
-    conn = psycopg2.connect(DSN)
+    conn = get_database_connection()
     curs = conn.cursor()
     try:
         curs.execute("SELECT * FROM users where email='%s'" % email)

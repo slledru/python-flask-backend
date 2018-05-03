@@ -3,7 +3,7 @@ import psycopg2
 import json
 from io import StringIO
 from db_modules.jwt_util import decode_auth_token, encode_auth_token
-from db_modules.db_util import find_user_by_email
+from db_modules.db_util import find_user_by_email, get_database_connection
 
 def is_authorized():
     token = request.cookies.get('token')
@@ -13,13 +13,12 @@ def is_authorized():
     else:
         return None
 
-def db_list_favorites(DSN):
+def db_list_favorites():
     payload = is_authorized()
     if (payload != None):
-        dictionary = find_user_by_email(DSN, payload)
+        dictionary = find_user_by_email(payload)
         if (dictionary['status'] == 200):
-            print("Opening connection using dsn:", DSN)
-            conn = psycopg2.connect(DSN)
+            conn = get_database_connection()
             print("Encoding for this connection is", conn.encoding)
             user_id = dictionary['id']
             curs = conn.cursor()

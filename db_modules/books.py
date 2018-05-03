@@ -3,10 +3,10 @@ import psycopg2
 import json
 from io import StringIO
 from db_modules.jwt_util import build_response
+from db_modules.db_util import get_database_connection
 
-def db_list_books(DSN):
-    print("Opening connection using dsn:", DSN)
-    conn = psycopg2.connect(DSN)
+def db_list_books():
+    conn = get_database_connection()
     print("Encoding for this connection is", conn.encoding)
 
     curs = conn.cursor()
@@ -31,8 +31,8 @@ def db_list_books(DSN):
     conn.close()
     return io.getvalue()
 
-def db_get_book(DSN, id):
-    conn = psycopg2.connect(DSN)
+def db_get_book(id):
+    conn = get_database_connection()
     print("Encoding for this connection is", conn.encoding)
 
     curs = conn.cursor()
@@ -52,7 +52,7 @@ def db_get_book(DSN, id):
     conn.close()
     return io.getvalue()
 
-def db_create_book(DSN):
+def db_create_book():
     if (request.data == b''):
         return Response(status=401)
     dataDict = json.loads(request.data)
@@ -66,7 +66,7 @@ def db_create_book(DSN):
         return Response(status=401, message='Description must not be blank')
     if (dataDict['coverUrl'] == None):
         return Response(status=401, message='Cover URL must not be blank')
-    conn = psycopg2.connect(DSN)
+    conn = get_database_connection()
     curs = conn.cursor()
     try:
         curs.execute("""
@@ -95,7 +95,7 @@ def db_create_book(DSN):
         json.dump(dictionary, io)
         return io.getvalue()
 
-def db_update_book(DSN, id):
+def db_update_book(id):
     if (request.data == b''):
         return Response(status=401)
     dataDict = json.loads(request.data)
@@ -121,7 +121,7 @@ def db_update_book(DSN, id):
         sqlString += 'cover_url="' + dataDict['coverUrl'] + '"'
     sqlString += ' where id = ' + id
     print(sqlString)
-    conn = psycopg2.connect(DSN)
+    conn = get_database_connection()
     curs = conn.cursor()
     try:
         curs.execute(sqlString)
@@ -149,9 +149,9 @@ def db_update_book(DSN, id):
         json.dump(dictionary, io)
         return io.getvalue()
 
-def db_delete_book(DSN, id):
+def db_delete_book(id):
     dictionary = {}
-    conn = psycopg2.connect(DSN)
+    conn = get_database_connection()
     curs = conn.cursor()
     try:
         curs.execute("DELETE FROM books where id='%s'" % id)
