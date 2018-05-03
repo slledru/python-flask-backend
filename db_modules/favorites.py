@@ -75,8 +75,6 @@ def db_check_favorite():
         if (dictionary['status'] == 200):
             user_id = dictionary['id']
             book_id = request.args.get('bookId')
-            print('user_id: ', user_id)
-            print('book_id: ', book_id)
             conn = get_database_connection()
             print("Encoding for this connection is ", conn.encoding)
             curs = conn.cursor()
@@ -117,12 +115,16 @@ def db_add_favorite():
         if (dictionary['status'] == 200):
             user_id = dictionary['id']
             book_id = dataDict['bookId']
+            print('user_id: ', user_id)
+            print('book_id: ', book_id)
             conn = get_database_connection()
             print("Encoding for this connection is", conn.encoding)
             curs = conn.cursor()
             response = Response("true", status=200)
             try:
-                curs.execute("insert into favorites (book_id, user_id) values('{book_id}', '{user_id}')".format(book_id=book_id, user_id=user_id))
+                sqlString = "insert into favorites (book_id, user_id) values('{book_id}', '{user_id}')".format(book_id=book_id, user_id=user_id)
+                print('sqlString', sqlString)
+                curs.execute(sqlString)
                 if (curs.rowcount > 0):
                     for row in curs.fetchall():
                         print('insert: ', row)
