@@ -134,8 +134,10 @@ def db_add_favorite():
                     print('dictionary: ', dictionary)
                     response = build_response(dictionary, None)
                 else:
+                    print('error - unable to insert')
                     response = Response("false", status=200)
             except psycopg2.Error as e:
+                print('error', e)
                 response = Response("false", status=200)
                 pass
 
