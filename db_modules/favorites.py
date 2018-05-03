@@ -112,7 +112,7 @@ def db_delete_favorite():
             conn = get_database_connection()
             print("Encoding for this connection is", conn.encoding)
             curs = conn.cursor()
-            response = Response(true, status=200)
+            response = Response("true", status=200)
             try:
                 curs.execute("delete from favorites where book_id='%s' and user_id='%s'" % book_id, user_id)
             except psycopg2.Error as e:
