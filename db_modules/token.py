@@ -1,6 +1,7 @@
 from flask import Flask, Response, request
-from utilities.jwt_util import decode_auth_token, match_hashed_password, build_response
+from utilities.jwt_util import decode_auth_token, match_hashed_password
 from utilities.db_util import find_user_by_email, get_database_connection
+from utilities.web_util import build_response
 import psycopg2
 import json
 from io import StringIO
@@ -17,7 +18,7 @@ def check_token():
 def create_token():
     print(request)
     if (request.data == b''):
-        return Response(status=401)
+        return Response(status=400)
     dataDict = json.loads(request.data)
     email = dataDict['email']
     password = dataDict['password']
@@ -32,11 +33,11 @@ def create_token():
             dictionary = {}
             dictionary['status'] = 401
             dictionary['message'] = 'Unable to authenticate user'
-            return Response(dictionary)
+            return build_response(dictionary, None)
         else:
             return build_response(dictionary, email)
     else:
-        return Response(dictionary)
+        return build_response(dictionary, None)
 
 def match_password(hashed_password, password):
     return match_hashed_password(hashed_password, password)

@@ -1,6 +1,7 @@
 from flask import Response, request
 from utilities.jwt_util import get_hashed_password, build_response
 from utilities.db_util import get_database_connection
+from utilities.web_util import build_response
 import psycopg2
 import json
 from io import StringIO
@@ -44,9 +45,4 @@ def db_create_user():
     conn.commit()
     curs.close()
     conn.close()
-    if (dictionary['status'] == 200):
         return build_response(dictionary, email)
-    else:
-        io = StringIO()
-        json.dump(dictionary, io)
-        return io.getvalue()

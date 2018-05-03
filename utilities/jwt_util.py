@@ -48,14 +48,3 @@ def get_hashed_password(password):
 def match_hashed_password(pw_hash, password):
     bcrypt = Bcrypt(app)
     return bcrypt.check_password_hash(pw_hash.encode('utf-8'), password)
-
-def build_response(data, email):
-    response = Response(
-        response = json.dumps(data),
-        status = 200,
-        mimetype = 'application/json'
-    )
-    if (email != None):
-        cookie = encode_auth_token(email)
-        response.set_cookie("token", cookie)
-    return response

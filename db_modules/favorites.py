@@ -4,6 +4,7 @@ import json
 from io import StringIO
 from utilities.jwt_util import decode_auth_token, encode_auth_token
 from utilities.db_util import find_user_by_email, get_database_connection
+from utilities.web_util import build_response
 
 def is_authorized():
     token = request.cookies.get('token')
@@ -38,7 +39,7 @@ def db_list_favorites():
                         where users.id = %s
                         """ % user_id
             curs.execute(sqlString)
-            io = StringIO()
+            response = build_response({}, None)
             if (curs.rowcount > 0):
                 data = list()
                 for row in curs.fetchall():
@@ -55,13 +56,12 @@ def db_list_favorites():
                     data.insert(0, dictionary)
                     # dict(id=row[0], title=row[1], author=row[2], genre=row[3]))
                     # data.insert(0, row)
-                json.dump(data, io)
-            else:
-                json.dump({}, io)
+                response = build_response(data, None)
+
             curs.close()
             conn.close()
-            return io.getvalue()
+            return response
         else:
-            return Response(dictionary)
+            return build_response(dictionary, None)
     else:
         return Response(status=401)

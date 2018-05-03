@@ -1,9 +1,8 @@
 from flask import Flask, Response, request
 import psycopg2
 import json
-from io import StringIO
-from utilities.jwt_util import build_response
 from utilities.db_util import get_database_connection
+from utilities.web_util import build_response
 
 def db_list_books():
     conn = get_database_connection()
@@ -12,7 +11,6 @@ def db_list_books():
     curs = conn.cursor()
     print("Extracting the rows ...")
     curs.execute("SELECT * FROM books order by title")
-    io = StringIO()
     data = list()
     for row in curs.fetchall():
         # print(row)
@@ -26,10 +24,7 @@ def db_list_books():
         data.insert(0, dictionary)
         # dict(id=row[0], title=row[1], author=row[2], genre=row[3]))
         # data.insert(0, row)
-    json.dump(data, io)
-    curs.close()
-    conn.close()
-    return io.getvalue()
+    return build_response(data, None)
 
 def db_get_book(id):
     conn = get_database_connection()
@@ -37,7 +32,6 @@ def db_get_book(id):
 
     curs = conn.cursor()
     curs.execute("SELECT * FROM books where id='%s'" % id)
-    io = StringIO()
     dictionary = {}
     for row in curs.fetchall():
         print(row)
@@ -47,10 +41,9 @@ def db_get_book(id):
         dictionary['genre'] = row[3]
         dictionary['description'] = row[4]
         dictionary['coverUrl'] = row[5]
-    json.dump(dictionary, io)
     curs.close()
     conn.close()
-    return io.getvalue()
+    return build_response(dictionary, None)
 
 def db_create_book():
     if (request.data == b''):
@@ -88,12 +81,7 @@ def db_create_book():
     conn.commit()
     curs.close()
     conn.close()
-    if (dictionary['status'] == 200):
-        return build_response(dictionary, None)
-    else:
-        io = StringIO()
-        json.dump(dictionary, io)
-        return io.getvalue()
+    return build_response(dictionary, None)
 
 def db_update_book(id):
     if (request.data == b''):
@@ -142,12 +130,7 @@ def db_update_book(id):
     conn.commit()
     curs.close()
     conn.close()
-    if (dictionary['status'] == 200):
-        return build_response(dictionary, None)
-    else:
-        io = StringIO()
-        json.dump(dictionary, io)
-        return io.getvalue()
+    return build_response(dictionary, None)
 
 def db_delete_book(id):
     dictionary = {}
