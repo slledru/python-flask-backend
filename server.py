@@ -25,7 +25,7 @@ app.debug = True
 
 print('DATABASE_URL: ', os.getenv('DATABASE_URL'))
 
-DSN = 'dbname=' + os.getenv('DATABASE_URL')
+DSN = 'dbname=bookshelf_dev' # + os.getenv('DATABASE_URL')
 
 print(sys.argv)
 
