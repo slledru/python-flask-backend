@@ -86,7 +86,7 @@ def db_check_favorite():
                     dictionary['id'] = row[0]
                     dictionary['bookId'] = row[1]
                     dictionary['userId'] = row[2]
-                response = build_array_response(dictionary, None)
+                response = build_response(dictionary, None)
             except psycopg2.Error as e:
                 response = Response(false, status=200)
                 pass
