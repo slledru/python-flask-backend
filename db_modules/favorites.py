@@ -114,7 +114,7 @@ def db_delete_favorite():
             curs = conn.cursor()
             response = Response("true", status=200)
             try:
-                curs.execute("delete from favorites where book_id='%s' and user_id='%s'" % book_id, user_id)
+                curs.execute("delete from favorites where (book_id='%s' and user_id='%s')" % (book_id, user_id))
             except psycopg2.Error as e:
                 response = Response(false, status=200)
                 pass
