@@ -1,15 +1,15 @@
 bcrypt==3.1.4
-contextlib2==0.5.5
-cryptography==2.1.4
-docutils==0.14
 Flask==0.12.2
 Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.3
 Flask-JWT==0.3.2
+gunicorn==19.8.1
+Jinja2==2.10
 jsonschema==2.6.0
-gunicorn==19.3.0
+MarkupSafe==1.0
 path.py==10.5
 pathlib2==2.3.0
+pipenv==11.10.1
 psycopg2==2.7.4
 psycopg2-binary==2.7.4
 PyJWT==1.4.2
@@ -17,3 +17,5 @@ python-dateutil==2.6.1
 python-dotenv==0.8.2
 requests==2.18.4
 SQLAlchemy==1.2.1
+webencodings==0.5.1
+Werkzeug==0.14.1
