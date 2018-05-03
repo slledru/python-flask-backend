@@ -76,9 +76,9 @@ def get_favorites():
 def check_favorite():
     return db_check_favorite()
 
-@app.route('/favorites/<id>', methods=['DELETE'])
-def delete_favorite(id):
-    return db_delete_favorite(id)
+@app.route('/favorites', methods=['DELETE'])
+def delete_favorite():
+    return db_delete_favorite()
 
 if __name__ == '__main__':
     app.run()

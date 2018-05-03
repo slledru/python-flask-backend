@@ -99,12 +99,16 @@ def db_check_favorite():
     else:
         return Response(status=401)
 
-def db_delete_favorite(book_id):
+def db_delete_favorite():
+    if (request.data == b''):
+        return Response(status=400)
+    dataDict = json.loads(request.data)
     payload = is_authorized()
     if (payload != None):
         dictionary = find_user_by_email(payload)
         if (dictionary['status'] == 200):
             user_id = dictionary['id']
+            book_id = dataDict['bookId']
             conn = get_database_connection()
             print("Encoding for this connection is", conn.encoding)
             curs = conn.cursor()
