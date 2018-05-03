@@ -82,6 +82,7 @@ def db_check_favorite():
                 for row in curs.fetchall():
                     # print(row)
                     dictionary = {}
+                    dictionary['status'] = 200
                     dictionary['id'] = row[0]
                     dictionary['bookId'] = row[1]
                     dictionary['userId'] = row[2]
