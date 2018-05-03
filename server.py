@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from db_modules.books import db_list_books, db_get_book, db_create_book, db_update_book, db_delete_book
 from db_modules.token import check_token, create_token, clear_cookie
 from db_modules.user import db_create_user
-from db_modules.favorites import db_list_favorites
+from db_modules.favorites import db_list_favorites, db_check_favorite
 
 # try:
 #     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -71,6 +71,10 @@ def post_user():
 @app.route('/favorites', methods=['GET'])
 def get_favorites():
     return db_list_favorites()
+
+@app.route('/favorites/check', methods=['GET'])
+def check_favorite():
+    return db_check_favorite()
 
 if __name__ == '__main__':
     app.run()
