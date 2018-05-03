@@ -82,14 +82,18 @@ def db_check_favorite():
             curs = conn.cursor()
             try:
                 curs.execute("select * from favorites where book_id={book_id} and user_id={user_id}".format(book_id=book_id, user_id=user_id))
-                for row in curs.fetchall():
-                    print('check: ', row)
-                    dictionary = {}
-                    dictionary['status'] = 200
-                    dictionary['id'] = row[0]
-                    dictionary['bookId'] = row[1]
-                    dictionary['userId'] = row[2]
-                response = build_response(dictionary, None)
+                if (curs.rowcount > 0):
+                    for row in curs.fetchall():
+                        print('check: ', row)
+                        dictionary = {}
+                        dictionary['status'] = 200
+                        dictionary['id'] = row[0]
+                        dictionary['bookId'] = row[1]
+                        dictionary['userId'] = row[2]
+                    print('dictionary: ', dictionary)
+                    response = build_response(dictionary, None)
+                else:
+                    response = Response("false", status=200)
             except psycopg2.Error as e:
                 print('not foun: ', e)
                 response = Response("false", status=200)
