@@ -73,11 +73,11 @@ def db_check_favorite():
     if (payload != None):
         dictionary = find_user_by_email(payload)
         if (dictionary['status'] == 200):
+            book_id = request.args.get('bookId')
             conn = get_database_connection()
             print("Encoding for this connection is", conn.encoding)
-            user_id = dictionary['id']
             curs = conn.cursor()
-            curs.execute("select * from favorites where user_id='%s'" % user_id)
+            curs.execute("select * from favorites where book_id='%s'" % book_id)
             for row in curs.fetchall():
                 # print(row)
                 dictionary = {}
