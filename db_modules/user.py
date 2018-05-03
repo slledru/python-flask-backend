@@ -45,4 +45,4 @@ def db_create_user():
     conn.commit()
     curs.close()
     conn.close()
-        return build_response(dictionary, email)
+    return build_response(dictionary, email)
