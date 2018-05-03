@@ -2,7 +2,7 @@ from flask import Response, Flask
 from utilities.jwt_util import encode_auth_token
 
 def build_response(data, email):
-    if (data['status'] == 200 || data['status'] == None):
+    if (data['status'] == 200 or data['status'] == None):
         response = Response(
             response = json.dumps(data),
             status = 200,
