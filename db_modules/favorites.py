@@ -76,12 +76,12 @@ def db_check_favorite():
             user_id = dictionary['id']
             book_id = request.args.get('bookId')
             conn = get_database_connection()
-            print("Encoding for this connection is", conn.encoding)
+            print("Encoding for this connection is ", conn.encoding)
             curs = conn.cursor()
             try:
                 curs.execute("select * from favorites where book_id={book_id} and user_id={user_id}".format(book_id=book_id, user_id=user_id))
                 for row in curs.fetchall():
-                    print(row)
+                    print('check: ', row)
                     dictionary = {}
                     dictionary['status'] = 200
                     dictionary['id'] = row[0]
@@ -89,6 +89,7 @@ def db_check_favorite():
                     dictionary['userId'] = row[2]
                 response = build_response(dictionary, None)
             except psycopg2.Error as e:
+                print('not foun: ', e)
                 response = Response("false", status=200)
                 pass
 
