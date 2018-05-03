@@ -61,6 +61,7 @@ def db_list_favorites():
                 response = build_array_response(data)
 
             curs.close()
+            conn.commit()
             conn.close()
             return response
         else:
@@ -98,6 +99,7 @@ def db_check_favorite():
                 pass
 
             curs.close()
+            conn.commit()
             conn.close()
             return response
         else:
@@ -144,6 +146,7 @@ def db_add_favorite():
                 pass
 
             curs.close()
+            conn.commit()
             conn.close()
             return response
         else:
@@ -174,6 +177,7 @@ def db_delete_favorite():
                 pass
 
             curs.close()
+            conn.commit()
             conn.close()
             return response
         else:

@@ -49,6 +49,7 @@ def db_get_book(id):
         dictionary['status'] = 500
         pass
     curs.close()
+    conn.commit()
     conn.close()
     return build_response(dictionary, None)
 
