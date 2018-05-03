@@ -3,8 +3,7 @@ import psycopg2
 import json
 from io import StringIO
 
-from flask import Flask, url_for, request, Response
-from flask_jwt import JWT, jwt_required, current_identity
+from flask import Flask
 import os.path
 from dotenv import load_dotenv
 

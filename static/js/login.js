@@ -30,6 +30,7 @@
         window.location.href = '/favorites.html';
       })
       .fail(($xhr) => {
+        console.log($xhr)
         Materialize.toast($xhr.responseText, 3000);
       });
   });

@@ -2,8 +2,8 @@ from flask import Flask, Response, request
 import psycopg2
 import json
 from io import StringIO
-from db_modules.jwt_util import build_response
-from db_modules.db_util import get_database_connection
+from utilities.jwt_util import build_response
+from utilities.db_util import get_database_connection
 
 def db_list_books():
     conn = get_database_connection()

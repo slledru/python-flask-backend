@@ -1,6 +1,6 @@
 from flask import Flask, Response, request
-from db_modules.jwt_util import decode_auth_token, match_hashed_password, build_response
-from db_modules.db_util import find_user_by_email, get_database_connection
+from utilities.jwt_util import decode_auth_token, match_hashed_password, build_response
+from utilities.db_util import find_user_by_email, get_database_connection
 import psycopg2
 import json
 from io import StringIO

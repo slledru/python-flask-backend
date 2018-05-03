@@ -2,8 +2,8 @@ from flask import Response, request
 import psycopg2
 import json
 from io import StringIO
-from db_modules.jwt_util import decode_auth_token, encode_auth_token
-from db_modules.db_util import find_user_by_email, get_database_connection
+from utilities.jwt_util import decode_auth_token, encode_auth_token
+from utilities.db_util import find_user_by_email, get_database_connection
 
 def is_authorized():
     token = request.cookies.get('token')
