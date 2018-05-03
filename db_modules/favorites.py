@@ -58,7 +58,7 @@ def db_list_favorites():
                     data.insert(0, dictionary)
                     # dict(id=row[0], title=row[1], author=row[2], genre=row[3]))
                     # data.insert(0, row)
-                response = build_array_response(data, None)
+                response = build_array_response(data)
 
             curs.close()
             conn.close()
