@@ -9,7 +9,7 @@ import os.path
 from dotenv import load_dotenv
 
 from db_modules.books import db_list_books, db_get_book
-from db_modules.token import check_token, create_token
+from db_modules.token import check_token, create_token, clear_cookie
 from db_modules.user import db_create_user
 from db_modules.favorites import db_list_favorites
 
@@ -53,6 +53,10 @@ def get_token():
 @app.route('/token', methods=['POST'])
 def post_token():
     return create_token(DSN)
+
+@app.route('/token', methods=['DELETE'])
+def delete_token():
+    return clear_cookie()
 
 @app.route('/users', methods=['POST'])
 def post_user():

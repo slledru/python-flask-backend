@@ -68,3 +68,14 @@ def find_user_by_email(DSN, email):
     curs.close()
     conn.close
     return dictionary
+
+  # res.setHeader('Set-Cookie', `token=; Path=\/; HttpOnly`)
+  # res.status(200).json(true)
+
+def clear_cookie():
+    response = Response(
+        response = "true",
+        status = 200
+    )
+    response.set_cookie("token", '')
+    return response
