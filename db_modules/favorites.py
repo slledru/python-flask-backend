@@ -122,7 +122,7 @@ def db_add_favorite():
             curs = conn.cursor()
             response = Response("true", status=200)
             try:
-                sqlString = "insert into favorites (book_id, user_id) values({book_id}, {user_id})".format(book_id=book_id, user_id=user_id)
+                sqlString = "insert into favorites (book_id, user_id) values({book_id}, {user_id}) returning *".format(book_id=book_id, user_id=user_id)
                 print('sqlString', sqlString)
                 curs.execute(sqlString)
                 if (curs.rowcount > 0):
