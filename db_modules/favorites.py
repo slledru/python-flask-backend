@@ -169,10 +169,11 @@ def db_delete_favorite():
             curs = conn.cursor()
             response = Response("true", status=200)
             try:
-                curs.execute("delete from favorites where book_id={book_id} and user_id={user_id})".format(book_id=book_id, user_id=user_id))
+                curs.execute("delete from favorites where book_id={book_id} and user_id={user_id}) returning *".format(book_id=book_id, user_id=user_id))
                 for row in curs.fetchall():
                     print('delete: ', row)
             except psycopg2.Error as e:
+                print('delete error', e)
                 response = Response("false", status=200)
                 pass
 
