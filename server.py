@@ -19,7 +19,7 @@ load_dotenv(dotenv_path)
 app =  Flask(__name__)
 app.debug = True
 
-DSN = 'dbname=bookshelf_dev'
+DSN = 'dbname=' + os.getenv('DATABASE_URL')
 
 print(sys.argv)
 
