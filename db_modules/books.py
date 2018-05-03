@@ -2,7 +2,7 @@ from flask import Flask, Response, request
 import psycopg2
 import json
 from utilities.db_util import get_database_connection
-from utilities.web_util import build_response
+from utilities.web_util import build_response, build_array_response
 
 def db_list_books():
     conn = get_database_connection()
@@ -24,7 +24,7 @@ def db_list_books():
         data.insert(0, dictionary)
         # dict(id=row[0], title=row[1], author=row[2], genre=row[3]))
         # data.insert(0, row)
-    return build_response(data, None)
+    return build_array_response(data)
 
 def db_get_book(id):
     conn = get_database_connection()

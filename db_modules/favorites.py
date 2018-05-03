@@ -4,7 +4,7 @@ import json
 from io import StringIO
 from utilities.jwt_util import decode_auth_token, encode_auth_token
 from utilities.db_util import find_user_by_email, get_database_connection
-from utilities.web_util import build_response
+from utilities.web_util import build_response, build_array_response
 
 def is_authorized():
     token = request.cookies.get('token')
@@ -56,7 +56,7 @@ def db_list_favorites():
                     data.insert(0, dictionary)
                     # dict(id=row[0], title=row[1], author=row[2], genre=row[3]))
                     # data.insert(0, row)
-                response = build_response(data, None)
+                response = build_array_response(data, None)
 
             curs.close()
             conn.close()
