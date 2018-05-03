@@ -39,7 +39,7 @@ def db_list_favorites():
                         where users.id = %s
                         """ % user_id
             curs.execute(sqlString)
-            response = build_response({}, None)
+            response = Response({}, status=200)
             if (curs.rowcount > 0):
                 data = list()
                 for row in curs.fetchall():
