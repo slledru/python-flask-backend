@@ -75,6 +75,8 @@ def db_check_favorite():
         if (dictionary['status'] == 200):
             user_id = dictionary['id']
             book_id = request.args.get('bookId')
+            print('user_id: ', user_id)
+            print('book_id: ', book_id)
             conn = get_database_connection()
             print("Encoding for this connection is ", conn.encoding)
             curs = conn.cursor()
