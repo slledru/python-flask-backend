@@ -13,11 +13,17 @@ from db_modules.token import check_token, create_token, clear_cookie
 from db_modules.user import db_create_user
 from db_modules.favorites import db_list_favorites
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+try:
+    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+    load_dotenv(dotenv_path)
+except Error as e:
+    print('error', e)
+    pass
 
 app =  Flask(__name__)
 app.debug = True
+
+print('DATABASE_URL: ', os.getenv('DATABASE_URL'))
 
 DSN = 'dbname=' + os.getenv('DATABASE_URL')
 
