@@ -7,6 +7,7 @@ Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.3
 Flask-JWT==0.3.2
 jsonschema==2.6.0
+gunicorn==19.3.0
 path.py==10.5
 pathlib2==2.3.0
 psycopg2==2.7.4

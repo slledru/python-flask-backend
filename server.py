@@ -85,7 +85,7 @@ def get_favorites():
     return db_list_favorites(DSN)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
 
 # @app.route("/messages", methods=['GET'])
 # def list():
