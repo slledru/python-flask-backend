@@ -8,7 +8,7 @@ from flask_jwt import JWT, jwt_required, current_identity
 import os.path
 from dotenv import load_dotenv
 
-from db_modules.books import db_list_books, db_get_book
+from db_modules.books import db_list_books, db_get_book, db_create_book, db_update_book, db_delete_book
 from db_modules.token import check_token, create_token, clear_cookie
 from db_modules.user import db_create_user
 from db_modules.favorites import db_list_favorites
@@ -45,6 +45,18 @@ def list_books():
 @app.route('/books/<id>', methods=['GET'])
 def get_book(id):
     return db_get_book(DSN, id)
+
+@app.route('/books', methods=['POST'])
+def post_book():
+    return db_create_book(DSN)
+
+@app.route('/books/<id>', methods=['PATCH'])
+def patch_book(id):
+    return db_update_book(DSN, id)
+
+@app.route('/books/<id>', methods=['DELETE'])
+def delete_book(id):
+    return db_delete_book(DSN, id)
 
 @app.route('/token', methods=['GET'])
 def get_token():

@@ -55,7 +55,7 @@ def build_response(data, email):
         status = 200,
         mimetype = 'application/json'
     )
-    cookie = encode_auth_token(email)
-    print(cookie)
-    response.set_cookie("token", cookie)
+    if (email != None):
+        cookie = encode_auth_token(email)
+        response.set_cookie("token", cookie)
     return response
