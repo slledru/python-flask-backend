@@ -1,5 +1,5 @@
 from flask import Response, request
-from utilities.jwt_util import get_hashed_password, build_response
+from utilities.jwt_util import get_hashed_password
 from utilities.db_util import get_database_connection
 from utilities.web_util import build_response
 import psycopg2
