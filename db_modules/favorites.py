@@ -122,7 +122,19 @@ def db_add_favorite():
             curs = conn.cursor()
             response = Response("true", status=200)
             try:
-                curs.execute("insert into favorites (book_id, user_id) values({book_id}, {user_id})".format(book_id=book_id, user_id=user_id))
+                curs.execute("insert into favorites (book_id, user_id) values('{book_id}', '{user_id}')".format(book_id=book_id, user_id=user_id))
+                if (curs.rowcount > 0):
+                    for row in curs.fetchall():
+                        print('insert: ', row)
+                        dictionary = {}
+                        dictionary['status'] = 200
+                        dictionary['id'] = row[0]
+                        dictionary['bookId'] = row[1]
+                        dictionary['userId'] = row[2]
+                    print('dictionary: ', dictionary)
+                    response = build_response(dictionary, None)
+                else:
+                    response = Response("false", status=200)
             except psycopg2.Error as e:
                 response = Response("false", status=200)
                 pass
@@ -151,6 +163,8 @@ def db_delete_favorite():
             response = Response("true", status=200)
             try:
                 curs.execute("delete from favorites where book_id={book_id} and user_id={user_id})".format(book_id=book_id, user_id=user_id))
+                for row in curs.fetchall():
+                    print('delete: ', row)
             except psycopg2.Error as e:
                 response = Response("false", status=200)
                 pass
