@@ -107,6 +107,34 @@ def db_check_favorite():
     else:
         return Response(status=401)
 
+def db_add_favorite():
+    if (request.data == b''):
+        return Response(status=400)
+    dataDict = json.loads(request.data)
+    payload = is_authorized()
+    if (payload != None):
+        dictionary = find_user_by_email(payload)
+        if (dictionary['status'] == 200):
+            user_id = dictionary['id']
+            book_id = dataDict['bookId']
+            conn = get_database_connection()
+            print("Encoding for this connection is", conn.encoding)
+            curs = conn.cursor()
+            response = Response("true", status=200)
+            try:
+                curs.execute("insert into favorites (book_id, user_id) values({book_id}, {user_id})".format(book_id=book_id, user_id=user_id))
+            except psycopg2.Error as e:
+                response = Response("false", status=200)
+                pass
+
+            curs.close()
+            conn.close()
+            return response
+        else:
+            return build_response(dictionary, None)
+    else:
+        return Response(status=401)
+
 def db_delete_favorite():
     if (request.data == b''):
         return Response(status=400)
