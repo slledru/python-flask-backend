@@ -31,16 +31,23 @@ def db_get_book(id):
     print("Encoding for this connection is", conn.encoding)
 
     curs = conn.cursor()
-    curs.execute("SELECT * FROM books where id='%s'" % id)
     dictionary = {}
-    for row in curs.fetchall():
-        print(row)
-        dictionary['id'] = row[0]
-        dictionary['title'] = row[1]
-        dictionary['author'] = row[2]
-        dictionary['genre'] = row[3]
-        dictionary['description'] = row[4]
-        dictionary['coverUrl'] = row[5]
+    dictionary['status'] = 200
+    try:
+        curs.execute("SELECT * FROM books where id='%s'" % id)
+        for row in curs.fetchall():
+            print(row)
+            dictionary['id'] = row[0]
+            dictionary['title'] = row[1]
+            dictionary['author'] = row[2]
+            dictionary['genre'] = row[3]
+            dictionary['description'] = row[4]
+            dictionary['coverUrl'] = row[5]
+    except psycopg2.Error as e:
+        print('err', e)
+        dictionary = {}
+        dictionary['status'] = 500
+        pass
     curs.close()
     conn.close()
     return build_response(dictionary, None)
