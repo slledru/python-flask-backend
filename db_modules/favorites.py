@@ -98,3 +98,27 @@ def db_check_favorite():
             return build_array_response(dictionary, None)
     else:
         return Response(status=401)
+
+def db_delete_favorite(book_id):
+    payload = is_authorized()
+    if (payload != None):
+        dictionary = find_user_by_email(payload)
+        if (dictionary['status'] == 200):
+            user_id = dictionary['id']
+            conn = get_database_connection()
+            print("Encoding for this connection is", conn.encoding)
+            curs = conn.cursor()
+            response = Response(true, status=200)
+            try:
+                curs.execute("delete from favorites where book_id='%s' and user_id='%s'" % book_id, user_id)
+            except psycopg2.Error as e:
+                response = Response(false, status=200)
+                pass
+
+            curs.close()
+            conn.close()
+            return response
+        else:
+            return build_response(dictionary, None)
+    else:
+        return Response(status=401)
