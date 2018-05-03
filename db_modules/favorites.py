@@ -77,14 +77,19 @@ def db_check_favorite():
             conn = get_database_connection()
             print("Encoding for this connection is", conn.encoding)
             curs = conn.cursor()
-            curs.execute("select * from favorites where book_id='%s'" % book_id)
-            for row in curs.fetchall():
-                # print(row)
-                dictionary = {}
-                dictionary['id'] = row[0]
-                dictionary['bookId'] = row[1]
-                dictionary['userId'] = row[2]
-            response = build_array_response(dictionary, None)
+            try:
+                curs.execute("select * from favorites where book_id='%s'" % book_id)
+                for row in curs.fetchall():
+                    # print(row)
+                    dictionary = {}
+                    dictionary['id'] = row[0]
+                    dictionary['bookId'] = row[1]
+                    dictionary['userId'] = row[2]
+                response = build_array_response(dictionary, None)
+            except psycopg2.Error as e:
+                response = Response(false, status=200)
+                pass
+
             curs.close()
             conn.close()
             return response
