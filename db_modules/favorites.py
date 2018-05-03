@@ -116,7 +116,7 @@ def db_delete_favorite():
             try:
                 curs.execute("delete from favorites where book_id={book_id} and user_id={user_id})".format(book_id=book_id, user_id=user_id))
             except psycopg2.Error as e:
-                response = Response(false, status=200)
+                response = Response("false", status=200)
                 pass
 
             curs.close()
