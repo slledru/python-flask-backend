@@ -1,4 +1,5 @@
 from flask import Response, Flask
+import json
 from utilities.jwt_util import encode_auth_token
 
 def build_response(data, email):
